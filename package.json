@@ -1,5 +1,5 @@
 {
-  "name": "@dstrekelj/component-libray",
+  "name": "@dstrekelj/component-library",
   "version": "0.0.0",
   "devDependencies": {
     "@babel/core": "^7.18.5",
@@ -13,16 +13,25 @@
     "@storybook/testing-library": "^0.0.13",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.28.0",
+    "@typescript-eslint/parser": "^5.28.0",
     "babel-loader": "^8.2.5",
+    "eslint": "^8.17.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.30.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "prettier": "^2.7.1",
     "typescript": "^4.7.3"
   },
   "peerDependencies": {
     "react": "^17.0.0",
     "react-dom": "^17.0.0"
   },
-  "dependencies": {},
   "scripts": {
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook",
+    "lint": "eslint . --cache",
+    "lint:fix": "eslint . --cache --fix"
   }
 }
