@@ -37,6 +37,7 @@
     "lint:fix": "eslint . --cache --fix"
   },
   "dependencies": {
-    "polished": "^4.2.2"
+    "polished": "^4.2.2",
+    "prop-types": "^15.8.1"
   }
 }

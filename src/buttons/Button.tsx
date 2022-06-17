@@ -1,3 +1,4 @@
+import * as PropTypes from 'prop-types';
 import { StyledButton } from './styles';
 
 export interface Props extends React.ComponentPropsWithRef<'button'> {
@@ -10,3 +11,7 @@ export function Button(props: Props) {
 
   return <StyledButton variant={variant as Props['variant']} {...buttonProps} />;
 }
+
+Button.propTypes = {
+  variant: PropTypes.oneOf(['primary', 'secondary', 'ghost']),
+};
