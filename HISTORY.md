@@ -121,3 +121,65 @@ Lint and fix:
 eslint . --cache
 eslint . --cache --fix
 ```
+
+## CSS-in-JS
+
+```
+npm install --save-peer styled-components
+npm install --save-dev @types/styled-components
+npm install --save polished
+```
+
+```
+export const COLOR_PRIMARY = '#f66';
+export const COLOR_SECONDARY = '#6ff';
+```
+
+```
+import styled, { css } from 'styled-components';
+import { COLOR_PRIMARY, COLOR_SECONDARY } from '../utils/styles';
+import { Props } from './Button';
+
+function getColors(props: Props) {
+  if (props.variant === 'ghost') {
+    return css`
+      color: ${COLOR_PRIMARY};
+      background-color: transparent;
+    `;
+  }
+
+  if (props.variant === 'primary') {
+    return css`
+      color: ${COLOR_SECONDARY};
+      background-color: ${COLOR_PRIMARY};
+    `;
+  }
+
+  if (props.variant === 'secondary') {
+    return css`
+      color: ${COLOR_PRIMARY};
+      background-color: ${COLOR_SECONDARY};
+    `;
+  }
+}
+
+export const StyledButton = styled.button<Props>`
+  cursor: pointer;
+  ${getColors}
+`;
+```
+
+```
+import { StyledButton } from './styles';
+
+export interface Props extends React.ComponentPropsWithRef<'button'> {
+  variant?: 'primary' | 'secondary' | 'ghost';
+}
+
+export function Button(props: Props) {
+  const componentProps = { variant: 'primary', ...props };
+  const { variant, ...buttonProps } = componentProps;
+
+  return <StyledButton variant={variant as Props['variant']} {...buttonProps} />;
+}
+```
