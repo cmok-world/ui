@@ -209,3 +209,31 @@ Button.propTypes = {
   variant: PropTypes.oneOf(['primary', 'secondary', 'ghost']),
 };
 ```
+
+## Namespaces (compound) components
+
+It's necessary to use an arrow function declaration. The regular function declaration cannot be typed as a namespaced component because it only allows its return value to be typed, and not the actual function type.
+
+```tsx
+import { JSXElementConstructor, ReactElement, ReactNode } from 'react';
+import { useUniqueId } from '../utils/useUniqueId';
+import { FieldContext } from './FieldContext';
+import { Input } from './Input';
+import { Label } from './Label';
+
+type Props = Omit<React.ComponentProps<typeof FieldContext.Provider>, 'value'>;
+
+interface ReturnType {
+  Label: typeof Label;
+  Input: typeof Input;
+}
+
+export const Field: JSXElementConstructor<Props> & ReturnType = (props: Props) => {
+  const id = useUniqueId();
+
+  return <FieldContext.Provider value={id}>{props.children}</FieldContext.Provider>;
+};
+
+Field.Label = Label;
+Field.Input = Input;
+```
