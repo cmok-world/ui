@@ -291,3 +291,5 @@ describe('Button', () => {
 ```
 
 `jest-environment-jsdom` [doesn't ship with Jest 28](https://jestjs.io/docs/upgrading-to-jest28#jsdom), we have to install it seperately and configure tests to use the environment through a config file or comment directive.
+
+Use `screen.debug()` inside test to see the DOM structure of what was rendered.
