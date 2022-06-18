@@ -293,3 +293,106 @@ describe('Button', () => {
 `jest-environment-jsdom` [doesn't ship with Jest 28](https://jestjs.io/docs/upgrading-to-jest28#jsdom), we have to install it seperately and configure tests to use the environment through a config file or comment directive.
 
 Use `screen.debug()` inside test to see the DOM structure of what was rendered.
+
+## build
+
+```sh
+npm i -D rollup rollup-plugin-delete rollup-plugin-node-externals babel-plugin-styled-components @babel/plugin-transform-runtime @babel/preset-env @babel/preset-react @babel/preset-typescript @rollup/plugin-babel @rollup/plugin-commonjs @rollup/plugin-node-resolve
+
+npm i -S @babel/runtime
+```
+
+Update package.json
+
+```js
+"main": "dist/index.cjs.js",
+"module": "dist/index.esm.js",
+"sideEffects": false,
+```
+
+Export source files in index.ts
+
+```ts
+export * from './buttons/Button';
+export * from './fields/Field';
+```
+
+Add rollup.config.js
+
+```js
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import babel from '@rollup/plugin-babel';
+import externals from 'rollup-plugin-node-externals';
+import del from 'rollup-plugin-delete';
+import pkg from './package.json';
+
+export default [
+  {
+    input: './src/index.ts',
+    plugins: [
+      del({ targets: 'dist/*' }),
+      externals({ deps: true }),
+      nodeResolve({ extensions: ['.js', '.ts', '.tsx'] }),
+      commonjs(),
+      babel({
+        babelHelpers: 'runtime',
+        exclude: '**/node_modules/**',
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+      }),
+    ],
+    output: [
+      { file: pkg.main, format: 'cjs' },
+      { file: pkg.module, format: 'es' },
+    ],
+  },
+];
+```
+
+Add .babelrc
+
+```json
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": ">0.5%, not IE 11"
+      }
+    ],
+    "@babel/preset-react",
+    "@babel/preset-typescript"
+  ],
+  "plugins": ["@babel/plugin-transform-runtime", "babel-plugin-styled-components"]
+}
+```
+
+Create tsconfig.build.json for type declarations:
+
+```json
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": true,
+    "declarationDir": "dist/typings",
+    "noEmit": false,
+    "emitDeclarationOnly": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["**/*.spec.*", "**/*.stories.*", "**/__mocks__/**"]
+}
+```
+
+Add scripts:
+
+```js
+"build:js": "rollup --config rollup.config.js",
+"build:ts": "tsc -p tsconfig.build.json",
+"build": "npm run build:js && npm run build:ts"
+```
+
+> Note: Error TS4023
+>
+> Replace interface with type declaration if importing the interface or the type it extends isn't an option.
+>
+> Source: https://stackoverflow.com/a/43901135

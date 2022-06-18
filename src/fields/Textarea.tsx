@@ -3,9 +3,9 @@ import { FieldContext } from './FieldContext';
 import { StyledTextarea } from './styles';
 import * as PropTypes from 'prop-types';
 
-interface Props extends React.ComponentPropsWithRef<'textarea'> {
+type Props = {
   isResizable?: boolean;
-}
+} & React.ComponentPropsWithRef<'textarea'>;
 
 export function Textarea(props: Props) {
   const componentProps = { isResizable: false, ...props };
