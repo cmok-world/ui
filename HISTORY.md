@@ -392,7 +392,35 @@ Add scripts:
 ```
 
 > Note: Error TS4023
->
 > Replace interface with type declaration if importing the interface or the type it extends isn't an option.
->
 > Source: https://stackoverflow.com/a/43901135
+
+> Note: Rewriting Git history
+> Use git-filter-repo tool on a fresh clone (e.g. `git clone local-repo-folder local-clone-repo-folder --no-local`) and then run tool (e.g. to rewrite email `git-filter-repo  --email-callback 'return email.replace(b".cm", b".com")`)
+> Source: https://github.com/newren/git-filter-repo
+
+## GitHub Actions
+
+Add .github/workflows/build.yml
+
+```yml
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.14.2'
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test
+      - run: npm run build
+```
