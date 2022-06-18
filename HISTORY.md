@@ -237,3 +237,57 @@ export const Field: JSXElementConstructor<Props> & ReturnType = (props: Props) =
 Field.Label = Label;
 Field.Input = Input;
 ```
+
+## Jest and testing-library
+
+```sh
+npm i -D jest @types/jest ts-jest jest-environment-jsdom @testing-library/react@^12.0.0 @testing-library/jest-dom
+```
+
+jest-setup.ts
+
+```ts
+import '@testing-library/jest-dom';
+```
+
+jest.config.js
+
+```js
+module.exports = {
+  preset: 'ts-jest',
+  setupFilesAfterEnv: ['<rootDir>/jest-setup.ts'],
+};
+```
+
+tsconfig.json
+
+```js
+"include": ["src/**/*", "./jest-setup.ts"]
+```
+
+Button.spec.tsx
+
+```tsx
+/**
+ * @jest-environment jsdom
+ */
+
+import { render, screen } from '@testing-library/react';
+import { Button } from './Button';
+
+describe('Button', () => {
+  it('renders <button>', () => {
+    render(<Button>Submit</Button>);
+
+    expect(screen.getByRole('button')).toContainHTML('Submit');
+  });
+
+  it('applies provided type', () => {
+    render(<Button type="submit">Submit</Button>);
+
+    expect(screen.getByRole('button')).toHaveAttribute('type', 'submit');
+  });
+});
+```
+
+`jest-environment-jsdom` [doesn't ship with Jest 28](https://jestjs.io/docs/upgrading-to-jest28#jsdom), we have to install it seperately and configure tests to use the environment through a config file or comment directive.
