@@ -1,2 +1,2 @@
-export * from './buttons/Button';
+export * from './button';
 export * from './fields/Field';
