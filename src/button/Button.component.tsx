@@ -1,5 +1,5 @@
 import * as PropTypes from 'prop-types';
-import { StyledButton } from './styles';
+import { StyledButton } from './Button.styles';
 
 export interface Props extends React.ComponentPropsWithRef<'button'> {
   variant?: 'primary' | 'secondary' | 'ghost';
